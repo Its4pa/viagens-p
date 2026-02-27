@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promoções | Viagens.com</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    
+    <style>
+        :root {
+            --primary: #0056b3;
+            --primary-hover: #004494;
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --nav-bg: rgba(255, 255, 255, 0.8);
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.dark-mode {
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --nav-bg: rgba(15, 23, 42, 0.8);
+        }
+
+        * { box-sizing: border-box; }
+
+        body { 
+            background-color: var(--bg-body); 
+            font-family: 'Inter', sans-serif; 
+            margin: 0;
+            padding-top: 100px; 
+            color: var(--text-main); 
+            transition: background-color var(--transition); 
+            line-height: 1.6; 
+            display: flex; 
+            flex-direction: column; 
+            min-height: 100vh; 
+        }
+
+        nav { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            background-color: var(--nav-bg);
+            backdrop-filter: blur(12px); 
+            z-index: 1000; 
+            border-bottom: 1px solid rgba(0,0,0,0.05); 
+        }
+
+        header { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 15px 40px; 
+            max-width: 1300px; 
+            margin: 0 auto; 
+        }
+
+        header img { 
+            height: 40px; 
+        }
+
+        .nav-links { 
+            display: flex; 
+            gap: 30px; 
+        }
+
+        .nav-links a { 
+            color: var(--text-main); 
+            text-decoration: none; 
+            font-weight: 500; 
+        }
+
+        #trocar-tema { 
+            background: transparent; 
+            border: 1px solid var(--text-muted); 
+            color: var(--text-main); 
+            padding: 8px 12px; 
+            border-radius: 50%; 
+            cursor: pointer; 
+        }
+
+        .grid-container { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 20px;
+            max-width: 1200px; 
+            margin: 40px auto; 
+            padding: 20px; 
+            flex: 1; 
+        }
+
+        .card-anuncio { 
+            background-color: var(--bg-card); 
+            border-radius: 20px; 
+            overflow: hidden; 
+            border: 1px solid rgba(0,0,0,0.05); 
+            transition: var(--transition); 
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); 
+        }
+        
+        /* Carousel Logic */
+        .image-container { 
+            position: relative; 
+            height: 220px; 
+            overflow: hidden; 
+        }
+
+        .carousel-images img { 
+            position: absolute; 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            opacity: 0; 
+            transition: opacity 0.8s ease; 
+        }
+
+        .carousel-images img.active {
+            opacity: 1; 
+        }
+        
+        .precos { 
+            position: absolute; 
+            bottom: 15px; 
+            left: 15px; 
+            z-index: 10; 
+            background: var(--primary);
+            color: white; 
+            padding: 6px 14px; 
+            border-radius: 10px; 
+            font-weight: 600; 
+            font-size: 0.9rem; 
+        }
+
+        .info-box { 
+            padding: 20px; 
+        }
+
+        .cta-button { 
+            display: block; 
+            width: 100%; 
+            padding: 12px; 
+            text-align: center; 
+            background: var(--primary); 
+            color: white; 
+            border-radius: 12px; 
+            font-weight: 600; 
+            cursor: pointer;
+            border: none; 
+            margin-top: 10px; 
+            transition: var(--transition); 
+        }
+
+        .cta-button:hover { 
+            background: var(--primary-hover); 
+        }
+        
+        .details-box { 
+            max-height: 0; 
+            overflow: hidden; 
+            transition: max-height 0.4s ease-out, padding 0.3s ease; 
+            background: rgba(0, 0, 0, 0.03); 
+            font-size: 0.85rem; 
+            color: var(--text-muted); 
+        }
+        .details-box.active { 
+            max-height: 200px; 
+            padding: 15px 20px; 
+            border-top: 1px solid rgba(0,0,0,0.05); 
+        }
+
+        body.dark-mode .details-box { 
+            background: rgba(255, 255, 255, 0.05); 
+        }
+
+        footer { 
+            background-color: var(--bg-card); 
+            padding: 30px 20px; 
+            text-align: center; 
+            border-top: 1px solid rgba(0,0,0,0.05); 
+            margin-top: auto; 
+        }
+        footer p { 
+            margin: 0; 
+            color: var(--text-muted); 
+            font-size: 0.9rem; 
+        }
+
+        @media (max-width: 900px) { .grid-container { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px) { .grid-container { grid-template-columns: 1fr; } .nav-links { display: none; } }
+    </style>
+</head>
+<body>
+
+<nav>
+    <header>
+        <img src="logo.png" alt="Logo">
+        <div class="nav-links">
+            <a href="https://nacionais.netlify.app">Nacionais</a>
+            <a href="https://viagenscom.netlify.app">Menu Inicial</a>
+            <a href="https://internacionais.netlify.app">Internacionais</a>
+        </div>
+        <button id="trocar-tema" onclick="toggleDarkMode()">🌙</button>
+    </header>
+</nav>
+
+<div style="text-align: center; margin-top: 40px;">
+    <h1>Melhores ofertas</h1>
+    <p>Aproveite nossas melhores ofertas por tempo limitado.</p>
+</div>
+
+<div class="grid-container">
+    <div class="card-anuncio">
+        <div class="image-container">
+            <span class="precos"><s>R$ 4.500</s> para R$ 1.200</span>
+            <div class="carousel-images">
+                <img src="cancun1.jpg" class="active">
+                <img src="cancun2.jpg">
+                <img src="cancun3.jpg">
+            </div>
+        </div>
+        <div class="info-box">
+            <h3>Cancún</h3>
+            <p>Um paraíso caribenho de águas azul-turquesa, praias de areia branca.</p>
+            <button class="cta-button" onclick="toggleDetails(this)">Ver Detalhes</button>
+        </div>
+        <div class="details-box">
+            <strong>Condições:</strong>
+            <ul>
+                <li>Duração: 7 dias</li>
+                <li>Parcela em até 12x sem juros</li>
+                <li>Saída: São Paulo (GRU)</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card-anuncio">
+        <div class="image-container">
+            <span class="precos"><s>R$ 3.500</s> para R$ 1.570</span>
+            <div class="carousel-images">
+                <img src="paris4.jpg" class="active">
+                <img src="paris5.jpg">
+                <img src="paris6.jpg">
+            </div>
+        </div>
+        <div class="info-box">
+            <h3>Paris</h3>
+            <p>5 dias na Cidade Luz com passeio pelo Rio Sena incluso.</p>
+            <button class="cta-button" onclick="toggleDetails(this)">Ver Detalhes</button>
+        </div>
+        <div class="details-box">
+            <strong>Condições:</strong>
+            <ul>
+                <li>Hospedagem inclusa</li>
+                <li>Parcela em 10x no cartão</li>
+                <li>Seguro viagem incluso</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card-anuncio">
+        <div class="image-container">
+            <span class="precos"><s>R$ 7.000</s> para R$ 1.800</span>
+            <div class="carousel-images">
+                <img src="ny1.jpg" class="active">
+                <img src="ny2.jpg">
+                <img src="ny3.jpg">
+            </div>
+        </div>
+        <div class="info-box">
+            <h3>Nova York</h3>
+            <p>A capital do mundo, repleta de arranha-céus, cultura vibrante e energia sem fim.</p>
+            <button class="cta-button" onclick="toggleDetails(this)">Ver Detalhes</button>
+        </div>
+        <div class="details-box">
+            <strong>Condições:</strong>
+            <ul>
+                <li>Seguro viagem incluso</li>
+                <li>Parcela em até 12x no boleto ou cartão</li>
+                <li>Passagem de primeira clase inclusa</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card-anuncio">
+        <div class="image-container">
+            <span class="precos"><s>R$ 3.500</s> para R$ 2.900</span>
+            <div class="carousel-images">
+                <img src="londres1.jpg" class="active">
+                <img src="londres2.jpg">
+                <img src="londres3.jpg">
+            </div>
+        </div>
+        <div class="info-box">
+            <h3>Londres</h3>
+            <p>Uma metrópole histórica onde tradição e modernidade se encontram.</p>
+            <button class="cta-button" onclick="toggleDetails(this)">Ver Detalhes</button>
+        </div>
+        <div class="details-box">
+            <strong>Condições:</strong>
+            <ul>
+                <li>Tour pela cidade</li>
+                <li>Hospedagem central</li>
+                <li>Ideal para casais</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card-anuncio">
+        <div class="image-container">
+            <span class="precos"><s>R$ 5.100</s> para R$ 3.750</span>
+            <div class="carousel-images">
+                <img src="roma1.jpg" class="active">
+                <img src="roma2.jpg">
+                <img src="roma3.jpg">
+            </div>
+        </div>
+        <div class="info-box">
+            <h3>Roma</h3>
+            <p>Um museu a céu aberto com ruínas milenares, história viva e gastronomia.</p>
+            <button class="cta-button" onclick="toggleDetails(this)">Ver Detalhes</button>
+        </div>
+        <div class="details-box">
+            <strong>Condições:</strong>
+            <ul>
+                <li>Visita ao Coliseu incluso</li>
+                <li>Hotel incluso</li>
+                <li>Parcela em até 2x no cartão</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card-anuncio">
+        <div class="image-container">
+            <span class="precos"><s>R$ 7.500</s> para R$ 4.250</span>
+            <div class="carousel-images">
+                <img src="veneza1.jpg" class="active">
+                <img src="veneza2.jpg">
+                <img src="veneza3.jpg">
+            </div>
+        </div>
+        <div class="info-box">
+            <h3>Veneza</h3>
+            <p>Uma joia romântica sobre as águas, com canais encantadores e charme eterno.</p>
+            <button class="cta-button" onclick="toggleDetails(this)">Ver Detalhes</button>
+        </div>
+        <div class="details-box">
+            <strong>Condições:</strong>
+            <ul>
+                <li>Passeio a barco pelos canais de Veneza</li>
+                <li>Jantar em restaurante típico</li>
+                <li>Tour pela cidade incluso</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2024-2026 Viagens.com. Todos os direitos reservados.</p>
+</footer>
+
+<script>
+    function toggleDetails(btn) {
+        const card = btn.closest('.card-anuncio');
+        const details = card.querySelector('.details-box');
+        details.classList.toggle('active');
+        btn.textContent = details.classList.contains('active') ? 'Fechar Detalhes' : 'Ver Detalhes';
+    }
+
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        document.getElementById('trocar-tema').textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+    }
+
+    // Carousel Logic: Switch images every 4 seconds unless hovered
+    setInterval(() => {
+        document.querySelectorAll('.card-anuncio').forEach(card => {
+            if (!card.matches(':hover')) {
+                const images = card.querySelectorAll('.carousel-images img');
+                if (images.length > 1) {
+                    let activeIndex = Array.from(images).findIndex(img => img.classList.contains('active'));
+                    images[activeIndex].classList.remove('active');
+                    let nextIndex = (activeIndex + 1) % images.length;
+                    images[nextIndex].classList.add('active');
+                }
+            }
+        });
+    }, 4000);
+</script>
+</body>
+</html>
